@@ -309,7 +309,6 @@ Install_key() {
     meu_ip
     exit
   }
-
 	ofus() {
                 unset server
                 server=$(echo ${txt_ofuscatw}|cut -d':' -f1)
@@ -396,44 +395,54 @@ Install_key() {
   }
 
   incertar_key() {
-msg -bar
-while [[ -z $Key ]]; do
-echo -ne "\033[1;96m          >>> INTRODUZCA LA KEY ABAJO <<<\n\033[1;31m        " && read Key
-Key="$(echo "$Key" | tr -d '[[:space:]]')"
-done
-cd $HOME
+	msg -bar
+	while [[ -z $Key ]]; do
+		echo -ne "\033[1;96m          >>> INTRODUZCA LA KEY ABAJO <<<\n\033[1;31m        " && read Key
+		Key="$(echo "$Key" | tr -d '[[:space:]]')"
+	done
+	cd $HOME
+	IiP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
+	[[ $(curl -s --connect-timeout 5 $IiP:8888 ) ]] && {
+		msg -bar
+		ofen=$(wget -qO- $(ofus $Key))
+		tput cuu1 && tput dl1
+		ip=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
+		wget --no-check-certificate -O $HOME/lista-arq $(ofus "$Key")/$ip > /dev/null 2>&1 && 	echo -e " \e[1;32m Codificacion Correcta \e[0m" | pv -qL 50
+	} || {
+	      invalid_key&&exit
+	}
+$HOME
 IiP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
 [[ $(curl -s --connect-timeout 5 $IiP:8888 ) ]] && {
-	tput cuu1 && tput dl1
-	msg -bar
-	ofen=$(wget -qO- $(ofus $Key))
-	tput cuu1 && tput dl1
-	ip=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
-	wget --no-check-certificate -O $HOME/lista-arq $(ofus "$Key")/$ip > /dev/null 2>&1 && 	echo -e " \e[1;32m Codificacion Correcta \e[0m" | pv -qL 50
+        tput cuu1 && tput dl1
+        msg -bar
+        echo -ne "\e[90m\e[43m CHEK KEY : \033[0;33m"
+        echo -e " \e[3;32m ENLAZADA AL GENERADOR\e[0m" | pv -qL 50
+        ofen=$(wget -qO- $(ofus $Key))
+        tput cuu1 && tput dl1
+        msg -bar3
+        echo -ne " \033[1;41m CHEK KEY : \033[0;33m"
+        tput cuu1 && tput dl1
+        ip=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
+        wget --no-check-certificate -O $HOME/lista-arq $(ofus "$Key")/$ip > /dev/null 2>&1 && echo -ne "\033[1;34m [ \e[3;32m VERIFICANDO KEY  \e[0m \033[1;34m]\033[0m" && pkrm=$(ofus "$Key")7
 } || {
-      invalid_key&&exit
+      bot_retorno="❌ERROR DE CONEXIÓN❌"
 }
 
-msgi -bar2
-echo -e "	\e[1;93m Ficheros Copiados \e[97m[\e[93m Key By @donpato_bot \e[0m"
-msgi -bar2
-stopping='CONFIGURANDO DIRECTORIOS'
-pontos="."
-IP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
-REQUEST=$(ofus "$Key" | cut -d'/' -f2)
-for arqx in $(cat $HOME/lista-arq); do
-	msgi -verm "${stopping}${pontos}"
-	wget --no-check-certificate -O ${SCPinstal}/${arqx} ${IP}:81/${REQUEST}/${arqx} >/dev/null 2>&1 && verificar_arq "${arqx}"
-	pontos+="."
-done
-sleep 1s
-msgi -bar2
-listaarqs="$(locate "lista-arq" | head -1)" && [[ -e ${listaarqs} ]] && rm $listaarqs
-echo "${SCPdir}/menu.sh" >/usr/bin/menu && chmod +x /usr/bin/menu
-echo "${SCPdir}/menu.sh" >/usr/bin/MENU && chmod +x /usr/bin/MENU
-echo "$Key" >${SCPdir}/key.txt
-[[ -d ${SCPinstal} ]] && rm -rf ${SCPinstal}
-install_fim
+if [[ ! $(cat $HOME/lista-arq|grep 'KEY INVALIDA!') ]]; then
+	msg -bar
+	echo -e "	\e[1;33mFicheros copiados: \e[1;91m@donpato_bot"
+	msg -bar
+	[[ -e $HOME/log.txt ]] && rm -f $HOME/log.txt
+	IP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
+	REQUEST=$(ofus "$Key"|cut -d'/' -f2)
+	echo -ne "\e[91mCONFIGURANDO DIRECTORIOS."&&pts='.'
+	for arqx in $(cat $HOME/lista-arq); do
+		echo -ne "$pts"&&pts+="."
+	        wget --no-check-certificate -O ${SCPinstal}/${arqx} ${IP}:81/${REQUEST}/${arqx} > /dev/null 2>&1 && verificar_arq "${arqx}"
+	done
+	install_fim
+fi
 
   }
   incertar_key
