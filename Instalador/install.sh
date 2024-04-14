@@ -142,8 +142,6 @@ password required pam_permit.so' >/etc/pam.d/common-password && chmod +x /etc/pa
   clear && clear
   apt update
   apt upgrade -y
-  wget /root/LATAM https://raw.githubusercontent.com/drowkid01/LATAM_Oficial/main/Instalador/LATAM -O /usr/bin/LATAM &>/dev/null
-  chmod +x /usr/bin/LATAM
 }
 
 post_reboot() {
@@ -178,8 +176,6 @@ dependencias() {
 }
 
 install_paquetes() {
-  wget /root/LATAM https://raw.githubusercontent.com/drowkid01/LATAM_Oficial/main/Instalador/LATAM -O /usr/bin/LATAM &>/dev/null
-  chmod +x /usr/bin/LATAM
   clear && clear
   #------- BARRA DE ESPERA
   msgi -bar2
