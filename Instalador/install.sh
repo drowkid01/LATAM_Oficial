@@ -398,7 +398,7 @@ Install_key() {
   incertar_key() {
 while [[ -z $Key ]]; do
 echo -ne "\033[1;96m          >>> INTRODUZCA LA KEY ABAJO <<<\n\033[1;31m        " && read Key
-Key="$(echo "$key" | tr -d '[[:space:]]')"
+Key="$(echo "$Key" | tr -d '[[:space:]]')"
 done
 cd $HOME
 IiP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
