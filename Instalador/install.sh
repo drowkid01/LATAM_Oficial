@@ -396,6 +396,7 @@ Install_key() {
   }
 
   incertar_key() {
+msg -bar
 while [[ -z $Key ]]; do
 echo -ne "\033[1;96m          >>> INTRODUZCA LA KEY ABAJO <<<\n\033[1;31m        " && read Key
 Key="$(echo "$Key" | tr -d '[[:space:]]')"
@@ -413,24 +414,21 @@ IiP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o
       invalid_key&&exit
 }
 
-IP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
-REQUEST=$(ofus "$Key" | cut -d'/' -f2)
 msgi -bar2
-echo -e "\e[1;93m Ficheros Copiados \e[97m[\e[93m Key By @donpato_bot \e[0m"
+echo -e "	\e[1;93m Ficheros Copiados \e[97m[\e[93m Key By @donpato_bot \e[0m"
 msgi -bar2
 stopping='CONFIGURANDO DIRECTORIOS'
+pontos="."
+IP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
+REQUEST=$(ofus "$Key" | cut -d'/' -f2)
 for arqx in $(cat $HOME/lista-arq); do
-msgi -verm "${stopping}${pontos}"
-wget --no-check-certificate -O ${SCPinstal}/${arqx} ${IP}:81/${REQUEST}/${arqx} >/dev/null 2>&1 && verificar_arq "${arqx}"
-tput cuu1 && tput dl1
-pontos+="."
+	msgi -verm "${stopping}${pontos}"
+	wget --no-check-certificate -O ${SCPinstal}/${arqx} ${IP}:81/${REQUEST}/${arqx} >/dev/null 2>&1 && verificar_arq "${arqx}"
+	pontos+="."
 done
 sleep 1s
 msgi -bar2
 listaarqs="$(locate "lista-arq" | head -1)" && [[ -e ${listaarqs} ]] && rm $listaarqs
-cat /etc/bash.bashrc | grep -v '[[ $UID != 0 ]] && TMOUT=15 && export TMOUT' >/etc/bash.bashrc.2
-echo -e '[[ $UID != 0 ]] && TMOUT=15 && export TMOUT' >>/etc/bash.bashrc.2
-mv -f /etc/bash.bashrc.2 /etc/bash.bashrc
 echo "${SCPdir}/menu.sh" >/usr/bin/menu && chmod +x /usr/bin/menu
 echo "${SCPdir}/menu.sh" >/usr/bin/MENU && chmod +x /usr/bin/MENU
 echo "$Key" >${SCPdir}/key.txt
