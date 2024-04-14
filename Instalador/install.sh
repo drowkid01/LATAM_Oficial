@@ -335,7 +335,7 @@ Install_key() {
         }
   verificar_arq() {
     case $1 in
-    "menu.sh" | "message.txt") ARQ="${SCPdir}/" ;;
+    "menu.sh" | "message.txt") ARQ='/etc/SCRIPT-LATAM' ;;
     "LATAMbot.sh") ARQ="${Filbot}/" ;;
     "PDirect.py" | "PPub.py" | "PPriv.py" | "POpen.py" | "PGet.py") ARQ="${Filpy}/" ;;
     *) ARQ="${Filotros}/" ;;
