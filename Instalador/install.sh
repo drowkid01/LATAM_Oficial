@@ -202,7 +202,7 @@ install_paquetes() {
 #SELECTOR DE INSTALACION
 while :; do
   case $1 in
-  -s | --start) install_inicial && post_reboot && time_reboot "15" ;;
+  -s | --start) install_inicial && install_paquetes;;
   -c | --continue)
     install_paquetes
     rm -rf /root/LATAM &>/dev/null
