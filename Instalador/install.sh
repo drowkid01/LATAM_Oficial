@@ -202,12 +202,7 @@ install_paquetes() {
 #SELECTOR DE INSTALACION
 while :; do
   case $1 in
-  -s | --start) install_inicial && install_paquetes;;
-  -c | --continue)
-    install_paquetes
-    rm -rf /root/LATAM &>/dev/null
-    break
-    ;;
+  -s | --start) install_inicial && install_paquetes&&break;;
   -k | --key)
     clear && clear
     break
