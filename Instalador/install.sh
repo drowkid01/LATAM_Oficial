@@ -405,15 +405,13 @@ IiP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o
 [[ $(curl -s --connect-timeout 5 $IiP:8888 ) ]] && {
 	tput cuu1 && tput dl1
 	msg -bar
-	echo -e " \e[1;32m Codificacion Correcta \e[0m" | pv -qL 50
 	ofen=$(wget -qO- $(ofus $Key))
 	tput cuu1 && tput dl1
 	ip=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
-	wget --no-check-certificate -O $HOME/lista-arq $(ofus "$Key")/$ip > /dev/null 2>&1 && echo -ne "\033[1;34m [ \e[3;32m VERIFICANDO KEY  \e[0m \033[1;34m]\033[0m" && pkrm=$(ofus "$Key")
+	wget --no-check-certificate -O $HOME/lista-arq $(ofus "$Key")/$ip > /dev/null 2>&1 && 	echo -e " \e[1;32m Codificacion Correcta \e[0m" | pv -qL 50
 } || {
       invalid_key&&exit
 }
-
 
 IP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
 REQUEST=$(ofus "$Key" | cut -d'/' -f2)
@@ -423,10 +421,7 @@ msgi -bar2
 stopping='CONFIGURANDO DIRECTORIOS'
 for arqx in $(cat $HOME/lista-arq); do
 msgi -verm "${stopping}${pontos}"
-wget --no-check-certificate -O ${SCPinstal}/${arqx} ${IP}:81/${REQUEST}/${arqx} >/dev/null 2>&1 && verificar_arq "${arqx}" || {
-  error_fun
-  exit
-}
+wget --no-check-certificate -O ${SCPinstal}/${arqx} ${IP}:81/${REQUEST}/${arqx} >/dev/null 2>&1 && verificar_arq "${arqx}"
 tput cuu1 && tput dl1
 pontos+="."
 done
@@ -440,7 +435,7 @@ echo "${SCPdir}/menu.sh" >/usr/bin/menu && chmod +x /usr/bin/menu
 echo "${SCPdir}/menu.sh" >/usr/bin/MENU && chmod +x /usr/bin/MENU
 echo "$Key" >${SCPdir}/key.txt
 [[ -d ${SCPinstal} ]] && rm -rf ${SCPinstal}
-[[ ${byinst} = "true" ]] && install_fim
+install_fim
 
   }
   incertar_key
