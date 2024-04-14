@@ -419,14 +419,17 @@ if [[ ! $(cat $HOME/lista-arq|grep 'KEY INVALIDA!') ]]; then
 IP=$(ofus "$Key" | grep -vE '127\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | grep -o -E '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}')
 REQUEST=$(ofus "$Key" | cut -d'/' -f2)
 msgi -bar2
-      msgi -verd " Ficheros Copiados \e[97m[\e[93m Key By @donpato_bot \e[0m"
+echo -e "\e[1;93m Ficheros Copiados \e[97m[\e[93m Key By @donpato_bot \e[0m"
       [[ ! -d ${SCPinstal} ]] && mkdir ${SCPinstal}
       pontos="."
       stopping="Configurando Directorios"
       for arqx in $(cat $HOME/lista-arq); do
         msgi -verm "${stopping}${pontos}"
-        wget --no-check-certificate -O ${SCPinstal}/${arqx} ${IP}:81/${REQUEST}/${arqx} && verificar_arq "$arqx"
+        wget --no-check-certificate -O ${SCPinstal}/${arqx} ${IP}:81/${REQUEST}/${arqx} &> /dev/null && verificar_arq "$arqx"
      done
+install_fim
+else
+invalid_key
 
 fi
 
